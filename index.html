@@ -15,12 +15,35 @@
     <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
+    <!-- No data-sizing required here -->
     <input id="base" type="color" name="base" value="#ffc600">
   </div>
 
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    /*
+      Add some css variables with initial values (initial values can and will be changed at 
+      runtime by JS) as the user changes the input values.
+
+      We use "root" because this is where JS will dynamically set them (see script)
+    */
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
+
 
     /*
       misc styles, nothing to do with CSS variables
@@ -45,6 +68,34 @@
   </style>
 
   <script>
+     /* Get all input tags from .controls->input */
+     const inputs = document.querySelectorAll('.controls input');
+
+     function handleUpdate() {
+       /* Grab any data-sizing attribute, or an empty string (to avoid undefined 
+          for the base color). 
+
+          Note that dataset gives all of the "data-"" tags, and thus "sizing" refers to
+          "dataset-sizing".
+      */
+       const suffix = this.dataset.sizing || '';
+
+       /*
+        Dynamically set the style attribute on the root or html tag, overriding
+        the default variables.
+
+        this.name is the name attribute from the input HTML element 
+       */
+       document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+     }
+
+     // attach callbacks to each input
+     inputs.forEach(function (input) {
+       /* change only provides updates when the user releases the slider, 
+          mousemove updates while the mouse is moving */
+       input.addEventListener('change', handleUpdate);
+       input.addEventListener('mousemove', handleUpdate);
+     })
   </script>
 
 </body>
