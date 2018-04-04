@@ -27,6 +27,10 @@
       runtime by JS) as the user changes the input values.
 
       We use "root" because this is where JS will dynamically set them (see script)
+
+      Note that if a variable value is specified with higher specificity, for example, directly
+      in a HTML element using the "style" attribute (ie. <h2 style="--base: #mycolor">), the
+      specificity rules mean that value will not be changed dynamically in that case.
     */
     :root {
       --base: #ffc600;
@@ -68,31 +72,48 @@
   </style>
 
   <script>
-     /* Get all input tags from .controls->input */
+     /* Get all input tags from .controls->input, returns a Node List.
+        See below where 'inputs' is used. */
      const inputs = document.querySelectorAll('.controls input');
 
+     /* 
+      * handleUpdate function
+      */
      function handleUpdate() {
        /* Grab any data-sizing attribute, or an empty string (to avoid undefined 
           for the base color). 
 
-          Note that dataset gives all of the "data-"" tags, and thus "sizing" refers to
-          "dataset-sizing".
+          Note that dataset gives all of the "data-* tags, and thus "dataset.sizing" 
+          refers to "dataset-sizing".
       */
        const suffix = this.dataset.sizing || '';
 
        /*
-        Dynamically set the style attribute on the root or html tag, overriding
-        the default variables.
+        Dynamically set the style attribute on the root (ie. documentElement), overriding
+        the default variables. Note that documentElement refers to root which is where the
+        variables are used.
 
-        this.name is the name attribute from the input HTML element 
+        Recall that since handleUpdate is only used here in association with a listener
+        for an input element, that implies this is also an input, and consequently 
+        this.name is the name attribute from the input element, such as 'spacing', 'blur',
+        or 'base', and this.value is the actual value returned from the input element as 
+        the user interacts with the control. Note that suffix isn't needed on the color 
+        element (ie. there is no data-sizing attribute used on the color picker), and 
+        thus in that case 'suffix' will be an empty string as per the usage of the || when
+        assigning the value above to the 'suffix' variable.
+
+        In Chrome tools, you can see the variable values being updated dynamically as the
+        controls are changed. Just look at the style in the document root.
        */
        document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
      }
 
-     // attach callbacks to each input
+     // attach callbacks to each input. Note that we are using a Node List here and 
+     // not an array, which means we are depending on a newer version of JS which supports
+     // forEach on a Node List without converting to an array.
      inputs.forEach(function (input) {
-       /* change only provides updates when the user releases the slider, 
-          mousemove updates while the mouse is moving */
+       /* change event only provides updates when the user releases the slider, 
+          while the mousemove event also updates while the mouse is moving */
        input.addEventListener('change', handleUpdate);
        input.addEventListener('mousemove', handleUpdate);
      })
