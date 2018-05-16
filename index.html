@@ -9,7 +9,7 @@
 
   <div class="controls">
     <label for="spacing">Spacing:</label>
-    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px" data-poop="poop">
 
     <label for="blur">Blur:</label>
     <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
@@ -26,6 +26,9 @@
       Add some css variables with initial values (initial values can and will be changed at 
       runtime by JS) as the user changes the input values.
 
+      The values seen here are default values, which in our case will be changed dynamically
+      based on inputs
+
       We use "root" because this is where JS will dynamically set them (see script)
 
       Note that if a variable value is specified with higher specificity, for example, directly
@@ -41,6 +44,9 @@
     img {
       padding: var(--spacing);
       background: var(--base);
+      /* for more info on filter, go here
+         https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+       */
       filter: blur(var(--blur));
     }
 
@@ -94,7 +100,7 @@
         variables are used.
 
         Recall that since handleUpdate is only used here in association with a listener
-        for an input element, that implies this is also an input, and consequently 
+        for an input element, that implies "this" is also an input, and consequently 
         this.name is the name attribute from the input element, such as 'spacing', 'blur',
         or 'base', and this.value is the actual value returned from the input element as 
         the user interacts with the control. Note that suffix isn't needed on the color 

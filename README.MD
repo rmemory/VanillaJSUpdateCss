@@ -4,13 +4,8 @@ This project originates from and is largely based on a tutorial from Wes Bos.
 
 This project demonstrates a few things:
 
-* Using a span element to define a class ('hl' for highligher) on a particular chunk of text within a string. This provides a mechanism to
-show using and changing a single variable which is used in multiple 
-locations, in this case in the 'hl' class and also on the image where
-the same variable (ie. --base) is used in both cases.
-* Using sliders (range) and a color picker input controls, all contained 
-  within the same form.
-* Declaring where we wish to apply CSS variables; we use the "root" element, along with the variables, and default values for each variable.
+* Primarily, the usage of CSS variables, which in this case are assigned to the root element:
+
 ```
     :root {
       --base: #ffc600;
@@ -18,6 +13,16 @@ the same variable (ie. --base) is used in both cases.
       --blur: 10px;
     }
 ```
+
+* This example shows usage of dataset to obtain a "data-" attribute.
+* Usage of filter
+* Usage of forEach on a nodeList
+* Using a span element to define a class ('hl' for highlighter) on a particular chunk of text within a string. This provides a mechanism to
+show using and changing a single variable which is used in multiple 
+locations, in this case in the 'hl' class and also on the image where
+the same variable (ie. --base) is used in both cases.
+* Using sliders (range) and a color picker input controls, all contained 
+  within the same form.
 * An example usage of CSS image style, filter: blur(someValue);
 * Performing a JS querySelectorAll to select all element tags using a particular class.
 * Using forEach on a Node List (without converting to an array and thus
